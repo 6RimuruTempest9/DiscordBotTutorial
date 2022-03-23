@@ -55,5 +55,17 @@ namespace DiscordBotTutorial.Commands
                 await context.Channel.SendMessageAsync(message.Result.Emoji).ConfigureAwait(false);
             }
         }
+
+        [Command("myusername")]
+        public async Task MyUsername(CommandContext context)
+        {
+            await context.Channel.SendMessageAsync(context.User.Username).ConfigureAwait(false);
+        }
+
+        [Command("getmessage")]
+        public async Task GetMessage(CommandContext context, params string[] message)
+        {
+            await context.Member.SendMessageAsync(string.Join(" ", message)).ConfigureAwait(false);
+        }
     }
 }
