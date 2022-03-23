@@ -41,7 +41,7 @@ namespace DiscordBotTutorial
 
             DiscordClient.UseInteractivity(new InteractivityConfiguration
             {
-                Timeout = TimeSpan.FromMinutes(0.5),
+                Timeout = TimeSpan.FromMinutes(2),
             });
 
             var commandsNextConfiguration = new CommandsNextConfiguration
