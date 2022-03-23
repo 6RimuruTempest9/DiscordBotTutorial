@@ -10,7 +10,7 @@ namespace DiscordBotTutorial.Commands
         [Description("Returns pong")]
         public async Task Ping(CommandContext context)
         {
-            await context.Channel.SendMessageAsync("Pong");
+            await context.Channel.SendMessageAsync("Pong").ConfigureAwait(false);
         }
 
         [Command("add")]
@@ -19,7 +19,7 @@ namespace DiscordBotTutorial.Commands
             [Description("First number")] int firstNumber,
             [Description("Second number")] int secondNumber)
         {
-            await context.Channel.SendMessageAsync((firstNumber + secondNumber).ToString());
+            await context.Channel.SendMessageAsync((firstNumber + secondNumber).ToString()).ConfigureAwait(false);
         }
 
         [Command("messagecoping")]
@@ -27,15 +27,15 @@ namespace DiscordBotTutorial.Commands
         {
             var interactivity = context.Client.GetInteractivity();
 
-            var message = await interactivity.WaitForMessageAsync(message => message.Channel == context.Channel);
+            var message = await interactivity.WaitForMessageAsync(message => message.Channel == context.Channel).ConfigureAwait(false);
 
             if (message.TimedOut)
             {
-                await context.Channel.SendMessageAsync("Timed out");
+                await context.Channel.SendMessageAsync("Timed out").ConfigureAwait(false);
             }
             else
             {
-                await context.Channel.SendMessageAsync(message.Result.Content);
+                await context.Channel.SendMessageAsync(message.Result.Content).ConfigureAwait(false);
             }
         }
 
@@ -44,16 +44,28 @@ namespace DiscordBotTutorial.Commands
         {
             var interactivity = context.Client.GetInteractivity();
 
-            var message = await interactivity.WaitForReactionAsync(message => message.Channel == context.Channel);
+            var message = await interactivity.WaitForReactionAsync(message => message.Channel == context.Channel).ConfigureAwait(false);
 
             if (message.TimedOut)
             {
-                await context.Channel.SendMessageAsync("Timed out");
+                await context.Channel.SendMessageAsync("Timed out").ConfigureAwait(false);
             }
             else
             {
-                await context.Channel.SendMessageAsync(message.Result.Emoji);
+                await context.Channel.SendMessageAsync(message.Result.Emoji).ConfigureAwait(false);
             }
+        }
+
+        [Command("myusername")]
+        public async Task MyUsername(CommandContext context)
+        {
+            await context.Channel.SendMessageAsync(context.User.Username).ConfigureAwait(false);
+        }
+
+        [Command("getmessage")]
+        public async Task GetMessage(CommandContext context, params string[] message)
+        {
+            await context.Member.SendMessageAsync(string.Join(" ", message)).ConfigureAwait(false);
         }
     }
 }

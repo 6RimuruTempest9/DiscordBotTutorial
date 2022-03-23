@@ -22,7 +22,7 @@ namespace DiscordBotTutorial
             using (var fileStream = File.OpenRead("config.json"))
             using (var streamReader = new StreamReader(fileStream, new UTF8Encoding(false)))
             {
-                json = await streamReader.ReadToEndAsync();
+                json = await streamReader.ReadToEndAsync().ConfigureAwait(false);
             }
 
             var configJson = JsonConvert.DeserializeObject<ConfigJson>(json);
@@ -41,7 +41,7 @@ namespace DiscordBotTutorial
 
             DiscordClient.UseInteractivity(new InteractivityConfiguration
             {
-                Timeout = TimeSpan.FromMinutes(0.5),
+                Timeout = TimeSpan.FromMinutes(2),
             });
 
             var commandsNextConfiguration = new CommandsNextConfiguration
@@ -54,6 +54,7 @@ namespace DiscordBotTutorial
             CommandsNextExtension = DiscordClient.UseCommandsNext(commandsNextConfiguration);
 
             CommandsNextExtension.RegisterCommands<FunCommands>();
+            CommandsNextExtension.RegisterCommands<TeamCommands>();
 
             await DiscordClient.ConnectAsync();
 
