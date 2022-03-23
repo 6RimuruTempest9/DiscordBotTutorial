@@ -22,7 +22,7 @@ namespace DiscordBotTutorial
             using (var fileStream = File.OpenRead("config.json"))
             using (var streamReader = new StreamReader(fileStream, new UTF8Encoding(false)))
             {
-                json = await streamReader.ReadToEndAsync();
+                json = await streamReader.ReadToEndAsync().ConfigureAwait(false);
             }
 
             var configJson = JsonConvert.DeserializeObject<ConfigJson>(json);
