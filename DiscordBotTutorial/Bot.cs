@@ -54,6 +54,7 @@ namespace DiscordBotTutorial
             CommandsNextExtension = DiscordClient.UseCommandsNext(commandsNextConfiguration);
 
             CommandsNextExtension.RegisterCommands<FunCommands>();
+            CommandsNextExtension.RegisterCommands<TeamCommands>();
 
             await DiscordClient.ConnectAsync();
 
