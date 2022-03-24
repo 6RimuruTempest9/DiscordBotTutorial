@@ -1,4 +1,6 @@
-﻿using DSharpPlus.CommandsNext;
+﻿using DiscordBotTutorial.Handlers.Dialogue;
+using DiscordBotTutorial.Handlers.Dialogue.Steps;
+using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using DSharpPlus.Interactivity.Extensions;
@@ -93,6 +95,47 @@ namespace DiscordBotTutorial.Commands
             var results = result.Select(x => $"{x.Emoji}: {x.Total}");
 
             await ctx.Channel.SendMessageAsync(string.Join("\n", results)).ConfigureAwait(false);
+        }
+
+        [Command("dialogue")]
+        public async Task Dialogue(CommandContext context)
+        {
+            var inputStep = new TextStep("Enter something interesting!", default, minLength: 10);
+            var funnyStep = new IntStep("Haha, funny", default, maxValue: 100);
+
+            string input = string.Empty;
+            int value = 0;
+
+            inputStep.OnValidResult += (result) =>
+            {
+                input = result;
+
+                if (result == "something interesting")
+                {
+                    inputStep.SetNextStep(funnyStep);
+                }
+            };
+
+            funnyStep.OnValidResult += (result) => value = result;
+
+            var userChannel = await context.Member.CreateDmChannelAsync().ConfigureAwait(false);
+
+            var inputDialogueHandler = new DialogueHandler(
+                context.Client,
+                userChannel,
+                context.User,
+                inputStep);
+
+            var succeded = await inputDialogueHandler.ProcessDialogue().ConfigureAwait(false);
+
+            if (!succeded)
+            {
+                return;
+            }
+
+            await context.Channel.SendMessageAsync(input).ConfigureAwait(false);
+
+            await context.Channel.SendMessageAsync(value.ToString()).ConfigureAwait(false);
         }
     }
 }
